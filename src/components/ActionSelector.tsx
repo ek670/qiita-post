@@ -1,15 +1,15 @@
-import React from "react";
+import { useState } from "react";
 import { InputForm } from "./InputForm";
 
 export const actions = [
-  "条件に一致する記事の一覧を作成日時の降順で返します",
+  "条件に一致する記事の一覧を作成日時が新しい順で返します",
   "その他",
 ];
 
 export const ActionSelector = () => {
   console.log("render ActionSelector");
 
-  const [action, setAction] = React.useState(actions[0]);
+  const [action, setAction] = useState(actions[0]);
 
   const selectAction = (e: { target: { value: string } }) => {
     setAction(e.target.value);

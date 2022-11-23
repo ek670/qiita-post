@@ -31,8 +31,46 @@ button {
   display: grid;
   grid-template-columns: 3fr 1fr;
   border-top: 1px solid whitesmoke;
+  max-height: 300px;
 }
 
 .wrapper article {
   padding: 16px;
+  position: relative;
+}
+
+.wrapper article a {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.author {
+  padding: 8px;
+}
+
+.author img {
+  height: 64px;
+  width: 64px;
+  width: auto;
+}
+
+article p {
+  align-items: center;
+  color: rgba(0, 0, 0, 0.87);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+article p img {
+  width: 12px;
+  height: 12px;
+  padding: 4px;
 }
