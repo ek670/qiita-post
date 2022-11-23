@@ -1,0 +1,38 @@
+body {
+  background-color: whitesmoke;
+}
+
+.block {
+  background-color: white;
+  border-radius: 16px;
+  margin: 8px;
+  padding: 8px;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  color: black;
+}
+
+.label {
+  text-align: left;
+  font-weight: bold;
+  color: black;
+}
+
+button {
+  border-radius: 8px;
+  border-color: aqua;
+  background-color: aqua;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  border-top: 1px solid whitesmoke;
+}
+
+.wrapper article {
+  padding: 16px;
+}
