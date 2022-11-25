@@ -1,10 +1,7 @@
 import { useState } from "react";
-import { InputForm } from "./InputForm";
+import { GetItemsInput } from "./GetItemsInput";
 
-export const actions = [
-  "条件に一致する記事の一覧を作成日時が新しい順で返します",
-  "その他",
-];
+export const actions = ["条件に一致する記事を作成日時の降順で返します"];
 
 export const ActionSelector = () => {
   console.log("render ActionSelector");
@@ -18,23 +15,17 @@ export const ActionSelector = () => {
   return (
     <>
       <div className="block">
-        <h2 className="title">Select Action</h2>
+        <h3 className="title">検索種別</h3>
         {actions.map((item) => {
           return (
             <div key={item}>
-              <input
-                id={item}
-                type="radio"
-                value={item}
-                onChange={selectAction}
-                checked={item === action}
-              />
+              <input id={item} type="radio" value={item} onChange={selectAction} checked={item === action} />
               <label htmlFor={item}>{item}</label>
             </div>
           );
         })}
       </div>
-      {action === actions[0] && <InputForm action={action} />}
+      {action === actions[0] && <GetItemsInput action={action} />}
     </>
   );
 };
