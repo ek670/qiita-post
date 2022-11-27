@@ -3,7 +3,7 @@ body {
 }
 
 .block {
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 16px;
   margin: 8px;
   padding: 8px;
@@ -82,9 +82,15 @@ button {
   width: 150px;
 }
 
+.card {
+  background: white;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
 .article {
-  border-top: 1px solid whitesmoke;
-  padding: 8px;
+  padding: 16px;
   position: relative;
 }
 
@@ -113,6 +119,10 @@ button {
   margin-left: 8px;
   text-decoration: none;
   position: relative;
+  background-color: lightgray;
+  border-radius: 6px;
+  color: black;
+  padding: 0 4px;
 }
 
 .footer {
