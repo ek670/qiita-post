@@ -2,31 +2,46 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { item } from "../model/Item";
+import { queryParams } from "../model/GetItemsParams";
 
 export const GetItemsResult = () => {
+  console.log("render Result component");
+
   const [seachParams] = useSearchParams();
 
   const [post, setPost] = useState<{ items: item[]; got: boolean; date: string }>({
     items: [],
     got: false,
-    date: new Date().toLocaleString("ja"),
+    date: "",
   });
 
   const client = axios.create({
     baseURL: "https://qiita.com/api/v2",
   });
 
-  useEffect(() => {
-    getItems();
-    console.log(`useEffect`);
-  }, [seachParams.get("page"), seachParams.get("per_page"), seachParams.get("tag")]);
+  useEffect(
+    () => {
+      console.log(`useEffect`);
+      getItems();
+    },
+    Object.keys(queryParams).map((key) => seachParams.get(key))
+  );
 
   const getItems = async () => {
     console.log("get items");
 
     const endpoint = `items?page=${seachParams.get("page") || "1"}&per_page=${seachParams.get("per_page") || "3"}`;
 
-    const response = await client.get(endpoint + (seachParams.get("tag") && `&query=tag%3A${seachParams.get("tag")}`), {
+    let query = "";
+    for (const k in queryParams) {
+      if (k != "page" && k != "per_page" && seachParams.get(k) != "") {
+        query == "" ? (query = "&query=") : (query += "+");
+        query = query + queryParams[k].encoded + seachParams.get(k);
+      }
+    }
+    console.log("query", query);
+
+    const response = await client.get(endpoint + query, {
       headers: {
         Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
       },
@@ -34,15 +49,15 @@ export const GetItemsResult = () => {
 
     setPost({ items: response.data, got: true, date: new Date().toLocaleString("ja") });
 
-    console.log(response);
+    console.log("response", response);
   };
 
   return (
     <div className="block">
       <h3 className="title">検索結果</h3>
-      <div>{post.got || "記事を取得中です"}</div>
-      <div>{post.items.length + "件  " + post.date}</div>
-      {post.got && post.items.length == 0 && "検索条件に一致する記事がありませんでした"}
+      {post.got || <div>記事を取得中です</div>}
+      {post.got && <div>{post.items.length + "件  " + post.date}</div>}
+      {post.got && post.items.length == 0 && <div>検索条件に一致する記事がありませんでした</div>}
       {post.items.map((item) => (
         <div key={item.id} className="card">
           <article className="article">

@@ -1,29 +1,28 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { GetItemsParams } from "../model/GetItemsParams";
+import { queryParams } from "../model/GetItemsParams";
 
 export const GetItemsInput = () => {
-  console.log("render InputForm");
+  console.log("render Input component");
 
   const [seachParams] = useSearchParams();
 
-  const [state, setState] = useState<GetItemsParams>({
-    tag: seachParams.get("tag") || "",
-    page: seachParams.get("page") || "1",
-    per_page: seachParams.get("per_page") || "3",
-  });
+  const [state, setState] = useState(
+    Object.fromEntries(Object.keys(queryParams).map((key) => [key, seachParams.get(key) || queryParams[key].default]))
+  );
 
   const handleInput = (e: { target: { name: string; value: string } }) => {
-    console.log({ ...state, [e.target.name]: e.target.value });
+    if (queryParams[e.target.name].isNum) {
+      if (e.target.value == "") e.target.value = "1";
 
-    if (e.target.name == "page") {
-      if (e.target.value == "") e.target.value = "1";
-    } else if (e.target.name == "per_page") {
-      if (e.target.value == "") e.target.value = "1";
-      if (parseInt(e.target.value) > 100) {
-        e.target.value = "100";
-      }
+      if (parseInt(e.target.value) < (queryParams[e.target.name].min || 0))
+        e.target.value = (queryParams[e.target.name].min || 0).toString();
+
+      if (parseInt(e.target.value) > (queryParams[e.target.name].max || 0))
+        e.target.value = (queryParams[e.target.name].max || 0).toString();
     }
+
+    console.log({ ...state, [e.target.name]: e.target.value });
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -37,38 +36,24 @@ export const GetItemsInput = () => {
     <div className="block">
       <h3 className="title">検索条件</h3>
       <div className="form">
-        <table>
-          <tr>
-            <th>
-              タグ（
-              <a href="https://qiita.com/tags" target="_blank" rel="noreferrer">
-                一覧
-              </a>
-              ）
-            </th>
-            <td>
-              <input
-                className="param"
-                type="text"
-                name="tag"
-                value={state.tag}
-                onChange={handleInput}
-                placeholder="指定する場合は入力してください"
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>ページ番号</th>
-            <td>
-              <input className="param" type="number" name="page" value={state.page} onChange={handleInput} />
-            </td>
-          </tr>
-          <tr>
-            <th>記事数/ページ</th>
-            <td>
-              <input className="param" type="number" name="per_page" value={state.per_page} onChange={handleInput} />
-            </td>
-          </tr>
+        <table className="table">
+          <tbody>
+            {Object.keys(queryParams).map((key) => (
+              <tr key={key} className="tr">
+                <th className="th">{queryParams[key].th}</th>
+                <td className="td">
+                  <input
+                    className="param"
+                    type={queryParams[key].isNum ? "number" : "text"}
+                    name={key}
+                    value={state[key]}
+                    onChange={handleInput}
+                    placeholder={queryParams[key].placeholder}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
         <div>
           <button onClick={showResult}>結果を取得する</button>

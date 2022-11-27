@@ -21,18 +21,16 @@ body {
   border-radius: 16px;
 }
 
-.form table {
-  /* padding: 24px 72px 24px 24px;
-  border-radius: 1vh;*/
+.table {
   border-spacing: 0;
   margin: 16px 0 0 16px;
 }
 
-.form table tr {
+.tr {
   border: 1px solid #eee;
 }
 
-.form table tr th {
+.th {
   padding: 15px;
   border-bottom: 1px solid #eee;
   text-align: left;
@@ -43,7 +41,7 @@ body {
   /* padding-right: 4em; */
 }
 
-.form table tr td {
+.td {
   padding: 0;
   border-bottom: 1px solid #eee;
   width: 33%;
@@ -54,19 +52,13 @@ body {
   border: 1px solid #999;
   margin: 0 5px;
   padding: 5px;
-  box-sizing: border-box;
-  min-width: 90%;
+  /* box-sizing: border-box; */
+  /* min-width: 90%; */
 }
 
 .form div {
   width: 100%;
   text-align: center;
-}
-
-.label {
-  text-align: left;
-  font-weight: bold;
-  color: black;
 }
 
 button {
