@@ -30,26 +30,34 @@ export const GetItemsResult = () => {
   const getItems = async () => {
     console.log("get items");
 
-    const endpoint = `items?page=${seachParams.get("page") || "1"}&per_page=${seachParams.get("per_page") || "3"}`;
+    const endpoint = `items?page=${seachParams.get("page") || queryParams.page.default}&per_page=${
+      seachParams.get("per_page") || queryParams.per_page.default
+    }`;
 
     let query = "";
     for (const k in queryParams) {
-      if (k != "page" && k != "per_page" && seachParams.get(k) != "") {
+      if (k != "page" && k != "per_page" && seachParams.get(k) != "" && seachParams.get(k) != null) {
         query == "" ? (query = "&query=") : (query += "+");
         query = query + queryParams[k].encoded + seachParams.get(k);
       }
     }
-    console.log("query", query);
+    query != "" && console.log("query", query);
 
-    const response = await client.get(endpoint + query, {
-      headers: {
-        Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
-      },
-    });
+    try {
+      const response = await client.get(endpoint + query, {
+        headers: {
+          Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
+        },
+      });
 
-    setPost({ items: response.data, got: true, date: new Date().toLocaleString("ja") });
+      setPost({ items: response.data, got: true, date: new Date().toLocaleString("ja") });
 
-    console.log("response", response);
+      console.log("response", response);
+    } catch (e) {
+      console.log(e);
+
+      setPost({ items: [], got: true, date: "" });
+    }
   };
 
   return (

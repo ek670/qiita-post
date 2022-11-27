@@ -25,7 +25,7 @@ export const queryParams: {
     encoded: "%3A",
   },
   page: { th: <>ページ番号</>, default: "1", isNum: true, min: 1 },
-  per_page: { th: <>記事数/ページ</>, default: "3", isNum: true, max: 100, min: 1 },
+  per_page: { th: <>記事数/ページ</>, default: "10", isNum: true, max: 100, min: 1 },
 };
 
 // >= %3E%3D
