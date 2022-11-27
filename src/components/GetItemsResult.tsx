@@ -1,60 +1,75 @@
-export type item = {
-  id: string;
-  title: string;
-  url: string;
-  likes_count: number;
-  stocks_count: number;
-  updated_at: string;
-  page_views_count: string;
-  user: {
-    id: string;
-    name: string;
-    profile_image_url: string;
-    organization: string;
-  };
-  tags: { name: string }[];
-};
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { item } from "../model/Item";
 
-export const GetItemsResult = (props: { items: item[]; date: string }) => {
+export const GetItemsResult = () => {
+  const [seachParams] = useSearchParams();
+
+  const [post, setPost] = useState<{ items: item[]; got: boolean; date: string }>({
+    items: [],
+    got: false,
+    date: new Date().toLocaleString("ja"),
+  });
+
+  const client = axios.create({
+    baseURL: "https://qiita.com/api/v2",
+  });
+
+  useEffect(() => {
+    getItems();
+    console.log(`useEffect`);
+  }, [seachParams.get("page"), seachParams.get("per_page"), seachParams.get("tag")]);
+
+  const getItems = async () => {
+    console.log("get items");
+
+    const endpoint = `items?page=${seachParams.get("page") || "1"}&per_page=${seachParams.get("per_page") || "3"}`;
+
+    const response = await client.get(endpoint + (seachParams.get("tag") && `&query=tag%3A${seachParams.get("tag")}`), {
+      headers: {
+        Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
+      },
+    });
+
+    setPost({ items: response.data, got: true, date: new Date().toLocaleString("ja") });
+
+    console.log(response);
+  };
+
   return (
-    <>
-      <div className="block">
-        <h3 className="title">検索結果</h3>
-        <span>{+props.items.length + "件  " + props.date}</span>
-        {props.items.length == 0 && "検索条件に一致する記事がありませんでした"}
-        {props.items.map((item) => {
-          return (
-            <div key={item.id} className="card">
-              <article className="article">
-                <a className="itemlink" href={item.url} target="_blank" rel="noreferrer"></a>
-                <h3 className="itemtitle">{item.title}</h3>
-                <span className="tags">
-                  <img className="icon" src={`${process.env.PUBLIC_URL}/tag-free7.jpg`} />
-                  {item.tags.map((tag, index) => {
-                    return (
-                      <span key={index}>
-                        {index != 0 && ","}
-                        <a className="taglink" href={`https://qiita.com/tags/${tag.name}`} target="_blank" rel="noreferrer">
-                          {tag.name}
-                        </a>
-                      </span>
-                    );
-                  })}
+    <div className="block">
+      <h3 className="title">検索結果</h3>
+      <div>{post.got || "記事を取得中です"}</div>
+      <div>{post.items.length + "件  " + post.date}</div>
+      {post.got && post.items.length == 0 && "検索条件に一致する記事がありませんでした"}
+      {post.items.map((item) => (
+        <div key={item.id} className="card">
+          <article className="article">
+            <a className="itemlink" href={item.url} target="_blank" rel="noreferrer"></a>
+            <h3 className="itemtitle">{item.title}</h3>
+            <span className="tags">
+              <img className="icon" src={`${process.env.PUBLIC_URL}/tag-free7.jpg`} />
+              {item.tags.map((tag, index) => (
+                <span key={index}>
+                  <a className="taglink" href={`https://qiita.com/tags/${tag.name}`} target="_blank" rel="noreferrer">
+                    {tag.name}
+                  </a>
                 </span>
-                <span className="footer">
-                  <img className="icon" src={`${process.env.PUBLIC_URL}/star.png`} />
-                  {item.stocks_count}
-                </span>
-                <span className="footer">
-                  <img className="icon" src={`${process.env.PUBLIC_URL}/heart.png`} />
-                  {item.likes_count}
-                </span>
-                <span className="footer">{" " + item.updated_at.slice(0, 10)}</span>
-              </article>
-            </div>
-          );
-        })}
-      </div>
-    </>
+              ))}
+            </span>
+            <span className="footer">
+              <img className="icon" src={`${process.env.PUBLIC_URL}/star.png`} />
+              {item.stocks_count}
+            </span>
+            <span className="footer">
+              <img className="icon" src={`${process.env.PUBLIC_URL}/heart.png`} />
+              {item.likes_count}
+            </span>
+            <span className="footer">{" " + item.updated_at.slice(0, 10)}</span>
+          </article>
+        </div>
+      ))}
+    </div>
   );
 };
