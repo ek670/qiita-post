@@ -8,17 +8,17 @@ export const GetItemsInput = () => {
   const [seachParams] = useSearchParams();
 
   const [state, setState] = useState(
-    Object.fromEntries(Object.keys(queryParams).map((key) => [key, seachParams.get(key) || queryParams[key].default]))
+    Object.fromEntries(Object.keys(queryParams).map((key) => [key, seachParams.get(key) || queryParams[key].defaultValue]))
   );
 
   const handleInput = (e: { target: { name: string; value: string } }) => {
     if (queryParams[e.target.name].isNum) {
       if (e.target.value == "") e.target.value = "1";
 
-      if (parseInt(e.target.value) < (queryParams[e.target.name].min || 0))
+      if (queryParams[e.target.name].min && parseInt(e.target.value) < (queryParams[e.target.name].min || 0))
         e.target.value = (queryParams[e.target.name].min || 0).toString();
 
-      if (parseInt(e.target.value) > (queryParams[e.target.name].max || 0))
+      if (queryParams[e.target.name].max && parseInt(e.target.value) > (queryParams[e.target.name].max || 0))
         e.target.value = (queryParams[e.target.name].max || 0).toString();
     }
 
@@ -30,7 +30,12 @@ export const GetItemsInput = () => {
   const navigate = useNavigate();
 
   // Resutページに遷移しAPIとクエリパラメータを渡す
-  const showResult = () => navigate(`/result?page=${state.page}&per_page=${state.per_page}&tag=${state.tag}`);
+  const showResult = () =>
+    navigate(
+      `/result?${Object.keys(state)
+        .map((key) => `${key}=${state[key]}`)
+        .join("&")}`
+    );
 
   return (
     <div className="block">

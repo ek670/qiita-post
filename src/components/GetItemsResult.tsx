@@ -30,15 +30,15 @@ export const GetItemsResult = () => {
   const getItems = async () => {
     console.log("get items");
 
-    const endpoint = `items?page=${seachParams.get("page") || queryParams.page.default}&per_page=${
-      seachParams.get("per_page") || queryParams.per_page.default
+    const endpoint = `items?page=${seachParams.get("page") || queryParams.page.defaultValue}&per_page=${
+      seachParams.get("per_page") || queryParams.per_page.defaultValue
     }`;
 
     let query = "";
     for (const k in queryParams) {
       if (k != "page" && k != "per_page" && seachParams.get(k) != "" && seachParams.get(k) != null) {
         query == "" ? (query = "&query=") : (query += "+");
-        query = query + queryParams[k].encoded + seachParams.get(k);
+        query = query + k + queryParams[k].encoded + seachParams.get(k);
       }
     }
     query != "" && console.log("query", query);
