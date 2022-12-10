@@ -62,9 +62,9 @@ export const GetItemsResult = () => {
 
   return (
     <div className="block">
-      <h3 className="title">検索結果</h3>
+      {/* <h3 className="title">検索結果</h3> */}
       {post.got || <div>記事を取得中です</div>}
-      {post.got && <div>{post.items.length + "件  " + post.date}</div>}
+      {/* {post.got && <div>{post.items.length + "件  " + post.date}</div>} */}
       {post.got && post.items.length == 0 && <div>検索条件に一致する記事がありませんでした</div>}
       {post.items.map((item) => (
         <div key={item.id} className="card">

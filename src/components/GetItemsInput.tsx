@@ -19,7 +19,7 @@ export const GetItemsInput = () => {
       if (p.name !== e.target.name) continue;
 
       if (p.isNum) {
-        if (e.target.value == "") e.target.value = p.min ? p.min.toString() : "1";
+        if (e.target.value == "") e.target.value = p.min ? p.min.toString() : "0";
 
         // 最小値が存在し入力値がそれを下回っているなら最小値で上書きする
         if (p.min && parseInt(e.target.value) < (p.min || 0)) e.target.value = (p.min || 0).toString();
@@ -45,7 +45,7 @@ export const GetItemsInput = () => {
 
   return (
     <div className="block">
-      <h3 className="title">検索条件</h3>
+      {/* <h3 className="title">検索条件</h3> */}
       <div className="form">
         <table className="table">
           <tbody>
