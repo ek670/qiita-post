@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { item } from "../model/Item";
-import { queryParams } from "../model/GetItemsParams";
+import { queryParams } from "../model/ParamsToGetItems";
 
 export const GetItemsResult = () => {
   console.log("render Result component");
 
-  const [seachParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [post, setPost] = useState<{ items: item[]; got: boolean; date: string }>({
     items: [],
@@ -24,21 +24,21 @@ export const GetItemsResult = () => {
       console.log(`useEffect`);
       getItems();
     },
-    Object.keys(queryParams).map((key) => seachParams.get(key))
+    queryParams.map((p) => searchParams.get(p.name))
   );
 
   const getItems = async () => {
     console.log("get items");
 
-    const endpoint = `items?page=${seachParams.get("page") || queryParams.page.defaultValue}&per_page=${
-      seachParams.get("per_page") || queryParams.per_page.defaultValue
+    const endpoint = `items?page=${searchParams.get("page") || queryParams[2].defaultValue}&per_page=${
+      searchParams.get("per_page") || queryParams[3].defaultValue
     }`;
 
     let query = "";
-    for (const k in queryParams) {
-      if (k != "page" && k != "per_page" && seachParams.get(k) != "" && seachParams.get(k) != null) {
+    for (const p of queryParams) {
+      if (p.name != "page" && p.name != "per_page" && searchParams.get(p.name) != "" && searchParams.get(p.name) != null) {
         query == "" ? (query = "&query=") : (query += "+");
-        query = query + k + queryParams[k].encoded + seachParams.get(k);
+        query = query + p.name + p.encoded + searchParams.get(p.name);
       }
     }
     query != "" && console.log("query", query);
