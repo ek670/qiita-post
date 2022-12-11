@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/qiita-postman/static/css/main.3dc1bfbf.css",
+    "main.js": "/qiita-postman/static/js/main.a4765984.js",
+    "static/js/787.39ccc65e.chunk.js": "/qiita-postman/static/js/787.39ccc65e.chunk.js",
+    "index.html": "/qiita-postman/index.html",
+    "main.3dc1bfbf.css.map": "/qiita-postman/static/css/main.3dc1bfbf.css.map",
+    "main.a4765984.js.map": "/qiita-postman/static/js/main.a4765984.js.map",
+    "787.39ccc65e.chunk.js.map": "/qiita-postman/static/js/787.39ccc65e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3dc1bfbf.css",
+    "static/js/main.a4765984.js"
+  ]
+}
