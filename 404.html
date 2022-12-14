@@ -9,7 +9,7 @@
 
       const segments = location.href.substr(origin.length + 1).split("/");
 
-      location.replace(origin + "/" + segments[0] + segments.length > 1 ?? "?p=" + encodeURIComponent(segments.slice(1).join("/")));
+      location.replace(origin + "/" + segments[0] + segments.length > 1 ? "?p=" + encodeURIComponent(segments.slice(1).join("/")) : "");
     </script>
   </head>
   <body></body>
