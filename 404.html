@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <title>React App</title>
     <script>
-      const location = window.location;
+      const wLocation = window.location;
       const origin = location.origin;
 
       const segments = location.href.substr(origin.length + 1).split("/");
 
-      location.replace(origin + "/" + segments[0] + "?p=" + encodeURIComponent(segments.slice(1).join("/")));
+      location.replace(origin + "/" + segments[0] + segments.length > 1 ?? "?p=" + encodeURIComponent(segments.slice(1).join("/")));
     </script>
   </head>
   <body></body>
