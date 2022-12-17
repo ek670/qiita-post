@@ -4,13 +4,23 @@
     <meta charset="utf-8" />
     <title>React App</title>
     <script>
+      /*
+        qiita_post/result => qiita_post?p=result
+        qiita_post/result?tag=&page= => qiita_post?p=result&
+
+      */
       const wLocation = window.location;
-      const origin = location.origin;
+      const origin = wLocation.origin;
 
-      const segments = location.href.substr(origin.length + 1).split("/");
+      const segments = wLocation.href.substr(origin.length + 1).split("/"); // qiita_post/result?tag=&page=
 
-      location.replace(origin + "/" + segments[0] + segments.length > 1 ? "?p=" + encodeURIComponent(segments.slice(1).join("/")) : "");
+      if (segments.length > 0 && segments[1].startsWith("result")) {
+        wLocation.replace(origin + "/" + segments[0] + "?p=" + encodeURIComponent(segments[1]));
+      }
     </script>
   </head>
-  <body></body>
+  <body>
+    <h2>NOT FOUND</h2>
+    <a href="https://ek670.github.io/qiita_post"><h3>Home</h3></a>
+  </body>
 </html>
