@@ -15,7 +15,7 @@
       const segments = wLocation.href.substr(origin.length + 1).split("/"); // qiita_post/result?tag=&page=
 
       if (segments.length > 0 && segments[1].startsWith("result")) {
-        wLocation.replace(segments[0] + "?p=" + encodeURIComponent(segments[1]));
+        wLocation.replace("?p=" + encodeURIComponent(segments[1]));
       }
     </script>
   </head>
