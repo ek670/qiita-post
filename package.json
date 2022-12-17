@@ -22,7 +22,10 @@
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "buildgh": "cross-env PUBLIC_URL=/qiita_post react-scripts build",
+    "cp404": "cp src/404.html build/404.html",
+    "deploy": "yarn buildgh && wait && yarn cp404 && sed -i 's@</title>@</title><script>(()=>{const queryString = window.location.search; if (queryString.startsWith(\"?path=\")) {const route = decodeURIComponent(queryString.substring(6)); window.history.replaceState(null, null, route);}})();</script>@g' build/index.html && gh-pages -d build "
   },
   "eslintConfig": {
     "extends": [
@@ -45,9 +48,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.11",
+    "gh-pages": "^4.0.0",
     "prettier": "2.7.1"
-  }
+  },
+  "homepage": "https://ek670.github.io/qiita_post"
 }

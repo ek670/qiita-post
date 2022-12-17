@@ -89,7 +89,7 @@ export const GetItemsResult = () => {
               <img className="icon" src={`${process.env.PUBLIC_URL}/heart.png`} />
               {item.likes_count}
             </span>
-            <span className="footer">{" " + item.updated_at.slice(0, 10)}</span>
+            <span className="footer">{"update:" + item.updated_at.slice(0, 10)}</span>
           </article>
         </div>
       ))}

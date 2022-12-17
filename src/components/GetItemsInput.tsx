@@ -38,7 +38,7 @@ export const GetItemsInput = () => {
   // Resutページに遷移しAPIとクエリパラメータを渡す
   const showResult = () =>
     navigateFunction(
-      `/result?${Object.keys(state)
+      `${process.env.PUBLIC_URL}/result?${Object.keys(state)
         .map((key) => `${key}=${state[key]}`)
         .join("&")}`
     );
