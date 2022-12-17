@@ -25,7 +25,7 @@
     "eject": "react-scripts eject",
     "buildgh": "cross-env PUBLIC_URL=/qiita_post react-scripts build",
     "cp404": "cp src/404.html build/404.html",
-    "deploy": "yarn buildgh && wait && yarn cp404 && sed -i 's@</title>@</title><script>(()=>{const queryString = window.location.search; if (queryString.startsWith(\"?path=\")) {const route = decodeURIComponent(queryString.substring(6)); window.history.replaceState(null, null, route);}})();</script>@g' build/index.html && gh-pages -d build "
+    "deploy": "yarn buildgh && wait && yarn cp404 && gh-pages -d build "
   },
   "eslintConfig": {
     "extends": [
