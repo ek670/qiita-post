@@ -7,9 +7,9 @@
       const wLocation = window.location;
       const origin = wLocation.origin;
 
-      const segments = wLocation.href.substr(origin.length + 1).split("/");
+      const segments = wLocation.href.substring(origin.length + 1).split("/");
 
-      if (segments.length > 0 && segments[1].startsWith("result")) {
+      if (segments.length == 2 && segments[1].startsWith("result")) {
         wLocation.replace(origin + "/" + segments[0] + "?path=" + encodeURIComponent(segments[1]));
       }
     </script>
