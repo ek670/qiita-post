@@ -4,19 +4,13 @@
     <meta charset="utf-8" />
     <title>React App</title>
     <script>
-      /*
-        qiita_post/result => qiita_post?p=result
-        qiita_post/result?tag=&page= => qiita_post?p=result&
-
-      */
       const wLocation = window.location;
       const origin = wLocation.origin;
 
-      const segments = wLocation.href.substr(origin.length + 1).split("/"); // qiita_post/result?tag=&page=
+      const segments = wLocation.href.substr(origin.length + 1).split("/");
 
       if (segments.length > 0 && segments[1].startsWith("result")) {
-        console.log(origin + "/" + segments[0] + "?p=" + encodeURIComponent(segments[1]));
-        wLocation.replace(origin + "/" + segments[0] + "?p=" + encodeURIComponent(segments[1]));
+        wLocation.replace(origin + "/" + segments[0] + "?path=" + encodeURIComponent(segments[1]));
       }
     </script>
   </head>
