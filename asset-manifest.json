@@ -1,15 +1,12 @@
 {
   "files": {
-    "main.css": "/qiita_post/static/css/main.3dc1bfbf.css",
-    "main.js": "/qiita_post/static/js/main.8473f78f.js",
-    "static/js/787.39ccc65e.chunk.js": "/qiita_post/static/js/787.39ccc65e.chunk.js",
-    "index.html": "/qiita_post/index.html",
-    "main.3dc1bfbf.css.map": "/qiita_post/static/css/main.3dc1bfbf.css.map",
-    "main.8473f78f.js.map": "/qiita_post/static/js/main.8473f78f.js.map",
-    "787.39ccc65e.chunk.js.map": "/qiita_post/static/js/787.39ccc65e.chunk.js.map"
+    "main.css": "/qiita_post/static/css/main.0a4e874a.css",
+    "main.js": "/qiita_post/static/js/main.ae1d319d.js",
+    "static/js/27.d7282bee.chunk.js": "/qiita_post/static/js/27.d7282bee.chunk.js",
+    "index.html": "/qiita_post/index.html"
   },
   "entrypoints": [
-    "static/css/main.3dc1bfbf.css",
-    "static/js/main.8473f78f.js"
+    "static/css/main.0a4e874a.css",
+    "static/js/main.ae1d319d.js"
   ]
 }
