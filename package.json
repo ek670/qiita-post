@@ -23,8 +23,8 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "buildgh": "cross-env PUBLIC_URL=/qiita_post react-scripts build",
-    "cp404": "cp src/404.html build/404.html",
+    "buildgh": "cross-env PUBLIC_URL=/qiita-post GENERATE_SOURCEMAP=false react-scripts build",
+    "cp404": "cp public/404.html build/404.html",
     "deploy": "yarn buildgh && wait && yarn cp404 && gh-pages -d build "
   },
   "eslintConfig": {
@@ -55,5 +55,5 @@
     "gh-pages": "^4.0.0",
     "prettier": "2.7.1"
   },
-  "homepage": "https://ek670.github.io/qiita_post"
+  "homepage": "https://ek670.github.io/qiita-post"
 }

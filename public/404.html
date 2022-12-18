@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <title>Qiita Post</title>
@@ -9,13 +9,13 @@
 
       const segments = wLocation.href.substring(origin.length + 1).split("/");
 
-      if (segments.length == 2 && segments[1].startsWith("result")) {
+      segments.length == 2 &&
+        segments[1].startsWith("result") &&
         wLocation.replace(origin + "/" + segments[0] + "?path=" + encodeURIComponent(segments[1]));
-      }
     </script>
   </head>
   <body>
-    <h2>NOT FOUND</h2>
-    <a href="https://ek670.github.io/qiita_post"><h3>Home</h3></a>
+    <h2>ページを見つけられませんでした。</h2>
+    <a href="https://ek670.github.io/qiita-post"><h3>Homeへ戻る</h3></a>
   </body>
 </html>

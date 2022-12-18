@@ -72,7 +72,7 @@ export const GetItemsResult = () => {
             <a className="itemlink" href={item.url} target="_blank" rel="noreferrer"></a>
             <h3 className="itemtitle">{item.title}</h3>
             <span className="tags">
-              <img className="icon" src={`${process.env.PUBLIC_URL}/tag-free7.jpg`} />
+              <img className="icon" src={`${process.env.PUBLIC_URL}/tag.png`} />
               {item.tags.map((tag, index) => (
                 <span key={index}>
                   <a className="taglink" href={`https://qiita.com/tags/${tag.name}`} target="_blank" rel="noreferrer">
@@ -82,11 +82,11 @@ export const GetItemsResult = () => {
               ))}
             </span>
             <span className="footer">
-              <img className="icon" src={`${process.env.PUBLIC_URL}/star.png`} />
+              <img className="icon" src={`${process.env.PUBLIC_URL}/stock.png`} />
               {item.stocks_count}
             </span>
             <span className="footer">
-              <img className="icon" src={`${process.env.PUBLIC_URL}/heart.png`} />
+              <img className="icon" src={`${process.env.PUBLIC_URL}/like.png`} />
               {item.likes_count}
             </span>
             <span className="footer">{"update:" + item.updated_at.slice(0, 10)}</span>
