@@ -21,6 +21,10 @@ body {
   border-radius: 16px;
 }
 
+.des {
+  margin-top: 8px;
+}
+
 .table {
   border-spacing: 0;
   margin: 16px 0 0 16px;

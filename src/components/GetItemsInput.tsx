@@ -43,7 +43,7 @@ export const GetItemsInput = () => {
   /** Resutページに遷移しAPIとクエリパラメータを渡す */
   const showResult = () =>
     navigateFunction(
-      `${process.env.PUBLIC_URL}/result?${Object.keys(state)
+      `${process.env.PUBLIC_URL}?${Object.keys(state)
         .map((key) => `${key}=${state[key]}`)
         .join("&")}`
     );
@@ -52,6 +52,7 @@ export const GetItemsInput = () => {
     <div className="block">
       {/* <h3 className="title">検索条件</h3> */}
       <div className="form">
+        <div className="des">条件を指定してQiitaの記事を取得します。</div>
         <table className="table">
           <tbody>
             {queryParams.map((p) => (
