@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { queryParams } from "../model/ParamsToGetItems";
 
@@ -7,35 +7,40 @@ export const GetItemsInput = () => {
 
   const [seachParams] = useSearchParams();
 
-  const [state, setState] = useState(
-    // 定義済みのクエリ項目設定からstateのオブジェクトを生成する
-    Object.fromEntries(queryParams.map((p) => [p.name, seachParams.get(p.name) || p.defaultValue]))
+  /** クエリパラメータからオブジェクトを生成する */
+  const getParamsObj = () => Object.fromEntries(queryParams.map((p) => [p.name, seachParams.get(p.name) || p.defaultValue]));
+
+  const [state, setState] = useState(getParamsObj());
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(
+    () => {
+      console.log(`useEffect input`);
+      setState(getParamsObj());
+    },
+    queryParams.map((p) => searchParams.get(p.name))
   );
 
   const handleInput = (e: { target: { name: string; value: string } }) => {
-    // if (queryParams.filter((v) => v.name === e.target.name).length != 1) return;
+    const p = queryParams.find((v) => v.name == e.target.name);
+    if (p == undefined) return;
 
-    for (const p of queryParams) {
-      if (p.name !== e.target.name) continue;
+    // if (p.isNum && e.target.value != "") {
+    //   // 最小値が存在し入力値がそれを下回っているなら最小値で上書きする
+    //   if (p.min && parseInt(e.target.value) < (p.min || 0)) e.target.value = (p.min || 0).toString();
 
-      if (p.isNum) {
-        if (e.target.value == "") e.target.value = p.min ? p.min.toString() : "0";
+    //   if (p.max && parseInt(e.target.value) > (p.max || 0)) e.target.value = (p.max || 0).toString();
+    // }
 
-        // 最小値が存在し入力値がそれを下回っているなら最小値で上書きする
-        if (p.min && parseInt(e.target.value) < (p.min || 0)) e.target.value = (p.min || 0).toString();
+    console.log("handleInput", { ...state, [e.target.name]: e.target.value });
 
-        if (p.max && parseInt(e.target.value) > (p.max || 0)) e.target.value = (p.max || 0).toString();
-      }
-
-      console.log("handleInput", { ...state, [e.target.name]: e.target.value });
-
-      setState({ ...state, [e.target.name]: e.target.value });
-    }
+    setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const navigateFunction = useNavigate();
 
-  // Resutページに遷移しAPIとクエリパラメータを渡す
+  /** Resutページに遷移しAPIとクエリパラメータを渡す */
   const showResult = () =>
     navigateFunction(
       `${process.env.PUBLIC_URL}/result?${Object.keys(state)
@@ -67,7 +72,9 @@ export const GetItemsInput = () => {
           </tbody>
         </table>
         <div>
-          <button onClick={showResult}>結果を取得する</button>
+          <button className="result" onClick={showResult}>
+            結果を取得する
+          </button>
         </div>
       </div>
     </div>

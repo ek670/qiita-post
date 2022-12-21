@@ -61,7 +61,7 @@ body {
   text-align: center;
 }
 
-button {
+.result {
   /* border-radius: 100vh; */
   display: inline-block;
   background: #d13415;
@@ -125,4 +125,52 @@ button {
 .icon {
   width: 12px;
   height: 12px;
+}
+
+.pagelist {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.pageno {
+  display: inline-block;
+  border: 1px #ccc solid;
+  border-radius: 5px/5px;
+  height: 40px;
+  line-height: 40px;
+  width: 10%;
+  text-align: center;
+  color: #000053;
+}
+
+.pageno button {
+  border: none;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px/5px;
+}
+
+/* .pageno a {
+  display: block;
+  text-decoration: none;
+} */
+
+/* .pageno a:hover {
+  color: #fff;
+  background-color: #003396;
+} */
+
+.lastpageno {
+  display: inline-block;
+  border: 1px #ccc solid;
+  border-radius: 5px/5px;
+  height: 40px;
+  line-height: 40px;
+  width: 10%;
+  text-align: center;
+  color: #fff;
+  background-color: #777;
 }
