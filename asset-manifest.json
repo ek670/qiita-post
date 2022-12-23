@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/qiita-post/static/css/main.dc0b41b3.css",
-    "main.js": "/qiita-post/static/js/main.8536fe48.js",
+    "main.css": "/qiita-post/static/css/main.0e83ae1b.css",
+    "main.js": "/qiita-post/static/js/main.68f5ecef.js",
     "static/js/27.d7282bee.chunk.js": "/qiita-post/static/js/27.d7282bee.chunk.js",
     "index.html": "/qiita-post/index.html"
   },
   "entrypoints": [
-    "static/css/main.dc0b41b3.css",
-    "static/js/main.8536fe48.js"
+    "static/css/main.0e83ae1b.css",
+    "static/js/main.68f5ecef.js"
   ]
 }
