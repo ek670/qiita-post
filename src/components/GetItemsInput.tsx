@@ -3,20 +3,18 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { queryParams } from "../model/ParamsToGetItems";
 
 export const GetItemsInput = () => {
-  console.log("render Input component");
-
-  const [seachParams] = useSearchParams();
-
-  /** クエリパラメータからオブジェクトを生成する */
-  const getParamsObj = () => Object.fromEntries(queryParams.map((p) => [p.name, seachParams.get(p.name) || p.defaultValue]));
-
-  const [state, setState] = useState(getParamsObj());
+  console.log("[render]Input component");
 
   const [searchParams] = useSearchParams();
 
+  /** クエリパラメータからオブジェクトを生成する */
+  const getParamsObj = () => Object.fromEntries(queryParams.map((p) => [p.name, searchParams.get(p.name) || p.defaultValue]));
+
+  const [state, setState] = useState(getParamsObj());
+
   useEffect(
     () => {
-      console.log(`useEffect input`);
+      console.log(`[useEffect]Input`);
       setState(getParamsObj());
     },
     queryParams.map((p) => searchParams.get(p.name))
@@ -25,13 +23,6 @@ export const GetItemsInput = () => {
   const handleInput = (e: { target: { name: string; value: string } }) => {
     const p = queryParams.find((v) => v.name == e.target.name);
     if (p == undefined) return;
-
-    // if (p.isNum && e.target.value != "") {
-    //   // 最小値が存在し入力値がそれを下回っているなら最小値で上書きする
-    //   if (p.min && parseInt(e.target.value) < (p.min || 0)) e.target.value = (p.min || 0).toString();
-
-    //   if (p.max && parseInt(e.target.value) > (p.max || 0)) e.target.value = (p.max || 0).toString();
-    // }
 
     console.log("handleInput", { ...state, [e.target.name]: e.target.value });
 
@@ -52,7 +43,7 @@ export const GetItemsInput = () => {
     <div className="block">
       {/* <h3 className="title">検索条件</h3> */}
       <div className="form">
-        <div className="des">条件を指定してQiitaの記事を取得します。</div>
+        <div className="des">条件を指定してQiitaの記事を取得します</div>
         <table className="table">
           <tbody>
             {queryParams.map((p) => (

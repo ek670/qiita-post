@@ -21,7 +21,7 @@ export const queryParams: {
     ),
     defaultValue: "",
     isNum: false,
-    placeholder: "指定する場合は入力してください",
+    placeholder: "一覧から選択可能です",
     encoded: "%3A",
   },
   { name: "stocks", th: <>最低ストック数</>, defaultValue: "100", isNum: true, encoded: "%3A%3E%3D" },
