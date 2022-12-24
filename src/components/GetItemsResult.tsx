@@ -199,7 +199,7 @@ export const GetItemsResult = () => {
                     <a
                       className="taglink"
                       href={`${process.env.PUBLIC_URL}?${queryParams
-                        .map((p) => p.name + "=" + (p.name != "tag" ? searchParams.get(p.name) : tag.name))
+                        .map((p) => p.name + "=" + (p.name == "tag" ? tag.name : p.name == "page" ? "1" : searchParams.get(p.name)))
                         .join("&")}`}
                       target="_blank"
                       rel="noreferrer"
