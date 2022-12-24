@@ -54,6 +54,5 @@
     "eslint-plugin-react": "^7.31.11",
     "gh-pages": "^4.0.0",
     "prettier": "2.7.1"
-  },
-  "homepage": "https://ek670.github.io/qiita-post"
+  }
 }
