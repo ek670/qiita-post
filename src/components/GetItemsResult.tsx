@@ -86,14 +86,14 @@ export const GetItemsResult = () => {
       return;
     }
 
-    const newPages: item[][] = notChangedQuery ? post.pages : [];
+    if (!notChangedQuery) post.pages = [];
 
-    console.log("[newPages]", newPages);
+    notChangedQuery && console.log("[notChangedQuery oldPages]", post.pages);
     console.log("post.pages.length", post.pages.length);
 
     // 既存pages末尾と新規pages先頭の間のページを記事の空配列で埋める
     post.pages.length < pageUnit * pageUnitIndex &&
-      newPages.push(...[...Array(pageUnit * pageUnitIndex - post.pages.length)].map(() => []));
+      post.pages.push(...[...Array(pageUnit * pageUnitIndex - post.pages.length)].map(() => []));
 
     // qiita APIで取得した記事をページ単位で配列に追加する
     [...Array(pageUnit)].map((_, i) => {
@@ -105,23 +105,25 @@ export const GetItemsResult = () => {
       console.log("page", pageUnit * pageUnitIndex + i, "end", end, resBody.slice(per_page * i, end));
 
       // 既にpageが挿入されていれば上書きする
-      if (newPages.at(pageUnit * pageUnitIndex + i) != undefined) {
-        newPages[pageUnit * pageUnitIndex + i] = resBody.slice(per_page * i, end);
+      if (post.pages.at(pageUnit * pageUnitIndex + i) != undefined) {
+        post.pages[pageUnit * pageUnitIndex + i] = resBody.slice(per_page * i, end);
         return;
       }
 
-      newPages.push(resBody.slice(per_page * i, end));
+      post.pages.push(resBody.slice(per_page * i, end));
     });
 
-    console.log("[newPages]", newPages);
+    console.log("[newPages]", post.pages);
 
-    setPost({ pages: newPages, status: got, queryParam: getParamsObj() }); //, date: new Date().toLocaleString("ja") });
+    setPost({ pages: post.pages, status: got, queryParam: getParamsObj() }); //, date: new Date().toLocaleString("ja") });
 
     if (pageUnit == 1) getNextPage();
   };
 
   const getNextPage = async () => {
     if (post.pages.at(page) != undefined && post.pages[page].length > 0) return;
+
+    console.log("get next page");
 
     const { resBody, status } = await getItems(page + 1, per_page);
 
