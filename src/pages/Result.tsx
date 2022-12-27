@@ -1,9 +1,9 @@
 import { GetItemsInput } from "../components/GetItemsInput";
-import { GetItemsResult } from "../components/GetItemsResult";
+import { GetItemsOutput } from "../components/GetItemsResult";
 
 export const Result = () => (
   <>
     <GetItemsInput />
-    <GetItemsResult />
+    <GetItemsOutput />
   </>
 );

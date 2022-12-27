@@ -14,8 +14,7 @@ process.env.NODE_ENV !== "development" &&
 const App = () => (
   <BrowserRouter>
     <Routes>
-      {/* <Route path={process.env.PUBLIC_URL} element={<Input />} /> */}
-      <Route path={process.env.PUBLIC_URL} element={<Result />} />
+      <Route index element={<Result />} />
     </Routes>
   </BrowserRouter>
 );
