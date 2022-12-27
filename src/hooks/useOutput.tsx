@@ -35,6 +35,8 @@ export const useOutput = () => {
 
       setItemstoState();
 
+      console.log("[newPages]", post.pages);
+
       window.scrollTo(0, 0);
     },
     queryParams.map((p) => searchParams.get(p.name))
@@ -45,6 +47,8 @@ export const useOutput = () => {
 
   /** qiita APIで取得した記事とステータスをstateに保存する */
   const setItemstoState = async () => {
+    console.log("[page]", page);
+
     // クエリパラメータが無いなら記事を消す
     if (queryParams.filter((v) => searchParams.get(v.name) != null).length == 0) {
       setPost({
@@ -64,83 +68,44 @@ export const useOutput = () => {
 
       console.log("[page change]");
 
-      getNextPage();
+      updatePost(page + 1);
 
       return;
     }
 
-    setPost({ ...post, status: loading });
+    if (!notChangedQuery) post.pages = [];
 
-    /** 一纏めにするページ数 */
-    const pageUnit = 1; // ((100 / per_page) | 0) > 7 ? 7 : (100 / per_page) | 0;
+    setPost({ ...post, status: loading, queryParam: getParamsObj() });
 
-    /** pageUnit単位でpageが何個目のブロックに含まれるか */
-    const pageUnitIndex = ((page - 1) / pageUnit) | 0;
+    // 既存ページから新規ページまで記事の空配列で埋める
+    page > post.pages.length && post.pages.push(...[...Array(page - post.pages.length)].map(() => []));
 
-    console.log("pageUnit", pageUnit, "index", pageUnitIndex);
-
-    const { resBody, status } = await getItems(pageUnitIndex + 1, per_page * pageUnit);
+    const status = await updatePost(page);
 
     if (status == failed) {
       setPost({ ...post, pages: [], status: failed, queryParam: getParamsObj() });
       return;
     }
 
-    if (!notChangedQuery) post.pages = [];
-
-    notChangedQuery && console.log("[notChangedQuery oldPages]", post.pages);
-    console.log("post.pages.length", post.pages.length);
-
-    // 既存pages末尾と新規pages先頭の間のページを記事の空配列で埋める
-    post.pages.length < pageUnit * pageUnitIndex &&
-      post.pages.push(...[...Array(pageUnit * pageUnitIndex - post.pages.length)].map(() => []));
-
-    // qiita APIで取得した記事をページ単位で配列に追加する
-    [...Array(pageUnit)].map((_, i) => {
-      // 記事の残りが無ければ終了する
-      if (resBody.length < per_page * i + 1) return;
-
-      const end = resBody.length < per_page * (i + 1) ? resBody.length : per_page * (i + 1);
-
-      console.log("page", pageUnit * pageUnitIndex + i, "end", end, resBody.slice(per_page * i, end));
-
-      // 既にpageが挿入されていれば上書きする
-      if (post.pages.at(pageUnit * pageUnitIndex + i) != undefined) {
-        post.pages[pageUnit * pageUnitIndex + i] = resBody.slice(per_page * i, end);
-        return;
-      }
-
-      post.pages.push(resBody.slice(per_page * i, end));
-    });
-
-    console.log("[newPages]", post.pages);
-
     setPost({ pages: post.pages, status: got, queryParam: getParamsObj() }); //, date: new Date().toLocaleString("ja") });
 
-    if (pageUnit == 1) getNextPage();
+    updatePost(page + 1);
   };
 
-  const getNextPage = async () => {
-    if (post.pages.at(page) != undefined && post.pages[page].length > 0) return;
+  const updatePost = async (pageno: number) => {
+    if (post.pages.at(pageno - 1) != undefined && post.pages[pageno - 1].length > 0) return got;
 
-    console.log("get next pagea");
+    const { resBody, status } = await getItems(pageno, per_page);
 
-    const { resBody, status } = await getItems(page + 1, per_page);
+    if (status == failed || resBody.length < 1) return status;
 
-    if (status == failed || resBody.length < 1) return;
+    if (post.pages.at(pageno - 1) != undefined) post.pages[pageno - 1] = resBody;
+    if (post.pages.length == pageno - 1) post.pages.push(resBody);
 
-    if (post.pages.at(page) != undefined) {
-      post.pages[page] = resBody;
-    } else {
-      post.pages.push(resBody);
-    }
+    console.log("pages", post.pages);
 
-    console.log(post.pages);
+    return status;
   };
-
-  const client = axios.create({
-    baseURL: "https://qiita.com/api/v2",
-  });
 
   const getItems = async (page: number, per_page: number) => {
     const endpoint = `items?page=${page}&per_page=${per_page}`;
@@ -153,14 +118,15 @@ export const useOutput = () => {
     console.log("[endpoint]", endpoint + query);
 
     try {
-      const response = await client.get(endpoint + query, {
-        headers:
-          process.env.NODE_ENV == "development"
-            ? {
-                Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
-              }
-            : {},
-      });
+      const response = await axios
+        .create({
+          baseURL: "https://qiita.com/api/v2",
+        })
+        .get(endpoint + query, {
+          headers: {
+            Authorization: "Bearer 541dfaeb7284908f175a9564708a69ff24c103d8",
+          },
+        });
 
       console.log("[response]", response);
 
@@ -176,9 +142,7 @@ export const useOutput = () => {
 
   /** 指定したページ番号のResutページに遷移する関数を返却する */
   const getShowResultFunc = (pageNo: number) => () =>
-    navigateFunction(
-      `${process.env.PUBLIC_URL}?${queryParams.map((p) => p.name + "=" + (p.name == "page" ? pageNo : searchParams.get(p.name))).join("&")}`
-    );
+    navigateFunction(`?${queryParams.map((p) => p.name + "=" + (p.name == "page" ? pageNo : searchParams.get(p.name))).join("&")}`);
 
   return { searchParams, post, getShowResultFunc, page };
 };

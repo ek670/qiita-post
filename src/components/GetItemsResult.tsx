@@ -8,7 +8,6 @@ export const GetItemsOutput = () => {
 
   return (
     <div className="block">
-      {/* <h3 className="title">検索結果</h3> */}
       {post.status == "loading" && <div>記事を取得中です</div>}
       {post.status == "got" && post.pages.at(page - 1) != undefined && post.pages[page - 1].length == 0 && (
         <div>検索条件に一致する記事がありませんでした</div>
@@ -26,7 +25,7 @@ export const GetItemsOutput = () => {
                   <span key={index}>
                     <a
                       className="taglink"
-                      href={`${process.env.PUBLIC_URL}?${queryParams
+                      href={`?${queryParams
                         .map((p) => p.name + "=" + (p.name == "tag" ? tag.name : p.name == "page" ? "1" : searchParams.get(p.name)))
                         .join("&")}`}
                       target="_blank"
