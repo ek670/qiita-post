@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { queryParams } from "../model/ParamsToGetItems";
+import { getItemsParams } from "../model/ParamsToGetItems";
 
 export const useInput = () => {
   const [searchParams] = useSearchParams();
 
   /** クエリパラメータからオブジェクトを生成する */
-  const getParamsObj = () => Object.fromEntries(queryParams.map((p) => [p.name, searchParams.get(p.name) || p.defaultValue]));
+  const getParamsObj = () => Object.fromEntries(getItemsParams.map((p) => [p.name, searchParams.get(p.name) || p.defaultValue]));
 
   // クエリパラメータにある値を初期値とする
   const [inputs, setInputs] = useState(getParamsObj());
@@ -16,11 +16,11 @@ export const useInput = () => {
       console.log(`[useEffect]Input`);
       setInputs(getParamsObj());
     },
-    queryParams.map((p) => searchParams.get(p.name))
+    getItemsParams.map((p) => searchParams.get(p.name))
   );
 
   const handleInput = (e: { target: { name: string; value: string } }) => {
-    const p = queryParams.find((v) => v.name == e.target.name);
+    const p = getItemsParams.find((v) => v.name == e.target.name);
     if (p == undefined) return;
 
     console.log("handleInput", { ...inputs, [e.target.name]: e.target.value });

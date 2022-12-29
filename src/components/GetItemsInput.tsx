@@ -1,5 +1,5 @@
 import { useInput } from "../hooks/useInput";
-import { queryParams } from "../model/ParamsToGetItems";
+import { getItemsParams } from "../model/ParamsToGetItems";
 
 export const GetItemsInput = () => {
   console.log("[render]Input component");
@@ -12,7 +12,7 @@ export const GetItemsInput = () => {
         <div className="des">条件を指定してQiitaの記事を取得します</div>
         <table className="table">
           <tbody>
-            {queryParams.map((p) => (
+            {getItemsParams.map((p) => (
               <tr key={p.name} className="tr">
                 <th className="th">{p.th}</th>
                 <td className="td">

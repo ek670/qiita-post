@@ -1,4 +1,4 @@
-export const queryParams: {
+export const getItemsParams: {
   name: string;
   th: JSX.Element;
   defaultValue: string;
