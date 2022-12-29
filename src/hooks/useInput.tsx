@@ -3,8 +3,6 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { queryParams } from "../model/ParamsToGetItems";
 
 export const useInput = () => {
-  console.log("[custom hook]Input");
-
   const [searchParams] = useSearchParams();
 
   /** クエリパラメータからオブジェクトを生成する */
