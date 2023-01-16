@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Result } from "./pages/Result";
+import { GetItemsPage } from "./pages/GetItemsPage";
 import "./style.css";
 
 process.env.NODE_ENV !== "development" &&
@@ -14,7 +14,7 @@ process.env.NODE_ENV !== "development" &&
 const App = () => (
   <BrowserRouter>
     <Routes>
-      <Route index element={<Result />} />
+      <Route index element={<GetItemsPage />} />
     </Routes>
   </BrowserRouter>
 );

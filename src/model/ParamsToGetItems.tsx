@@ -1,4 +1,4 @@
-export const getItemsParams: {
+export const paramsToGetItems: {
   name: string;
   th: JSX.Element;
   defaultValue: string;

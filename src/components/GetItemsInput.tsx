@@ -1,10 +1,10 @@
 import { useInput } from "../hooks/useInput";
-import { getItemsParams } from "../model/ParamsToGetItems";
+import { paramsToGetItems } from "../model/ParamsToGetItems";
 
 export const GetItemsInput = () => {
   console.log("[render]Input component");
 
-  const { inputs, handleInput, showOutput } = useInput();
+  const { inputs, handleInput, setQueryParams } = useInput();
 
   return (
     <div className="block">
@@ -12,7 +12,7 @@ export const GetItemsInput = () => {
         <div className="des">条件を指定してQiitaの記事を取得します</div>
         <table className="table">
           <tbody>
-            {getItemsParams.map((p) => (
+            {paramsToGetItems.map((p) => (
               <tr key={p.name} className="tr">
                 <th className="th">{p.th}</th>
                 <td className="td">
@@ -20,7 +20,7 @@ export const GetItemsInput = () => {
                     className="param"
                     type={p.isNum ? "number" : "text"}
                     name={p.name}
-                    value={inputs[p.name]}
+                    value={inputs[p.name] || p.defaultValue}
                     onChange={handleInput}
                     placeholder={p.placeholder}
                   />
@@ -30,7 +30,7 @@ export const GetItemsInput = () => {
           </tbody>
         </table>
         <div>
-          <button className="result" onClick={showOutput}>
+          <button className="result" onClick={setQueryParams}>
             結果を取得する
           </button>
         </div>

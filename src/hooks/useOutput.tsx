@@ -2,15 +2,14 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { item } from "../model/Item";
-import { getItemsParams } from "../model/ParamsToGetItems";
+import { paramsToGetItems } from "../model/ParamsToGetItems";
+import { status } from "../model/type";
 
 export const useOutput = () => {
   const [searchParams] = useSearchParams();
 
   /** クエリパラメータからオブジェクトを生成する */
-  const getParamsObj = () => Object.fromEntries(getItemsParams.map((p) => [p.name, searchParams.get(p.name)]));
-
-  type status = "neutral" | "loading" | "got" | "failed";
+  const getParamsObj = () => Object.fromEntries(paramsToGetItems.map((p) => [p.name, searchParams.get(p.name)]));
 
   const [state, setState] = useState<{
     pages: item[][];
@@ -32,18 +31,16 @@ export const useOutput = () => {
 
       window.scrollTo(0, 0);
     },
-    getItemsParams.map((p) => searchParams.get(p.name))
+    paramsToGetItems.map((p) => searchParams.get(p.name))
   );
-
-  const page = parseInt(searchParams.get("page") || "1");
-  const per_page = parseInt(searchParams.get("per_page") || getItemsParams[2]?.defaultValue);
 
   /** qiita APIで取得した記事とステータスをstateに保存する */
   const setItemstoState = async () => {
+    const page = parseInt(searchParams.get("page") || "1");
     console.log("[page]", page);
 
-    // クエリパラメータが無いなら記事を消す
-    if (!getItemsParams.some((v) => searchParams.get(v.name) != null)) {
+    // クエリパラメータが無いならOutputを表示しない
+    if (!paramsToGetItems.some((v) => searchParams.get(v.name) != null)) {
       setState({
         pages: [],
         status: "neutral",
@@ -53,7 +50,7 @@ export const useOutput = () => {
     }
 
     /** page以外のクエリパラメータが変更されたか */
-    const optionHasChanged = getItemsParams.some((v) => v.name != "page" && state.queryParams[v.name] != searchParams.get(v.name));
+    const optionHasChanged = paramsToGetItems.some((v) => v.name != "page" && state.queryParams[v.name] != searchParams.get(v.name));
 
     // クエリパラメータで指定されたページ番号の記事が取得済みなら、APIを叩かず終了
     if (!optionHasChanged && (state.pages.at(page - 1) || []).length != 0) {
@@ -68,15 +65,13 @@ export const useOutput = () => {
 
     if (optionHasChanged) state.pages = [];
 
-    setState({ ...state, status: "loading", queryParams: getParamsObj() });
+    setState({ pages: state.pages, status: "loading", queryParams: getParamsObj() });
 
-    // 既存ページから新規ページまで記事の空配列で埋める
+    // 既存ページの次から新規ページまで記事の空配列で埋める
     page > state.pages.length && state.pages.push(...[...Array(page - state.pages.length)].map(() => []));
 
-    const status = await updatePages(page);
-
-    if (status == "failed") {
-      setState({ ...state, pages: [], status: "failed", queryParams: getParamsObj() });
+    if ((await updatePages(page)) == "failed") {
+      setState({ pages: [], status: "failed", queryParams: getParamsObj() });
       return;
     }
 
@@ -85,15 +80,16 @@ export const useOutput = () => {
     updatePages(page + 1);
   };
 
-  const updatePages = async (pageno: number) => {
-    if (state.pages.at(pageno - 1) != undefined && state.pages[pageno - 1].length > 0) return "got";
+  const updatePages = async (page: number) => {
+    if (state.pages.at(page - 1) != undefined && state.pages[page - 1].length > 0) return "got";
 
-    const { resBody, status } = await getItems(pageno, per_page);
+    const per_page = parseInt(searchParams.get("per_page") || paramsToGetItems[2]?.defaultValue || "10");
 
-    if (status == "failed" || resBody.length < 1) return status;
+    const { resBody, status } = await getItems(page, per_page);
+    if (status == "failed") return status;
 
-    if (state.pages.at(pageno - 1) != undefined) state.pages[pageno - 1] = resBody;
-    if (state.pages.length == pageno - 1) state.pages.push(resBody);
+    if (state.pages.length >= page) state.pages[page - 1] = resBody;
+    if (state.pages.length == page - 1) state.pages.push(resBody);
 
     console.log("pages", state.pages);
 
@@ -109,9 +105,9 @@ export const useOutput = () => {
   }> => {
     const endpoint = `items?page=${page}&per_page=${per_page}`;
 
-    const query = getItemsParams
-      .filter((p) => !["page", "per_page"].includes(p.name) && searchParams.get(p.name))
-      .map((p, i) => (i == 0 ? "&query=" : "") + p.name + p.encoded + searchParams.get(p.name))
+    const query = paramsToGetItems
+      .filter((v) => !["page", "per_page"].includes(v.name) && searchParams.get(v.name))
+      .map((v, i) => (i == 0 ? "&query=" : "") + v.name + v.encoded + searchParams.get(v.name))
       .join("+");
 
     console.log("[endpoint]", endpoint + query);
@@ -140,8 +136,8 @@ export const useOutput = () => {
   const navigateFunction = useNavigate();
 
   /** 指定したページ番号のOutputページに遷移する関数を返却する */
-  const getShowResultFunc = (pageNo: number) => () =>
-    navigateFunction(`?${getItemsParams.map((p) => p.name + "=" + (p.name == "page" ? pageNo : searchParams.get(p.name))).join("&")}`);
+  const getShowResultFunc = (page: number) => () =>
+    navigateFunction(`?${paramsToGetItems.map((v) => v.name + "=" + (v.name == "page" ? page : searchParams.get(v.name))).join("&")}`);
 
   return { state, getShowResultFunc };
 };
