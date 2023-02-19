@@ -6,7 +6,7 @@ export const useInput = () => {
   const [searchParams] = useSearchParams();
 
   /** クエリパラメータからオブジェクトを生成する */
-  const getParamsObj = () => Object.fromEntries(paramsToGetItems.map((p) => [p.name, searchParams.get(p.name) || p.defaultValue]));
+  const getParamsObj = () => Object.fromEntries(paramsToGetItems.map((p) => [p.name, searchParams.get(p.name) ?? p.defaultValue]));
 
   // クエリパラメータにある値を初期値とする
   const [inputs, setInputs] = useState(getParamsObj());

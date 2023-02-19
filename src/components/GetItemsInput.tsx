@@ -20,7 +20,7 @@ export const GetItemsInput = () => {
                     className="param"
                     type={p.isNum ? "number" : "text"}
                     name={p.name}
-                    value={inputs[p.name] || p.defaultValue}
+                    value={inputs[p.name] ?? p.defaultValue}
                     onChange={handleInput}
                     placeholder={p.placeholder}
                   />
